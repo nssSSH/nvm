@@ -1,0 +1,8 @@
+NVM - a simple web scraper that makes a visual graph of a small piece of internet
+What it does:
+- Takes a website link from user
+- Scrape the site
+- Find links that go outside to the site
+- Note the links
+- Scrape the links
+- Repeat this same process till user goes ctrl + c
