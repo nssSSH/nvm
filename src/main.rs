@@ -9,16 +9,21 @@ error_chain! {
         IoError(std::io::Error);
     }
 }
+fn read_user() ->  (Url, String, String) {
+    let mut user_inp = String::new();
+    io::stdin().read_line(&mut user_inp).expect("Some thing went wrong.");
+    let parsed = Url::parse(user_inp.trim()).expect("Something went wrong ig");
+    let base_url: String = parsed.host_str().expect("Something went wrong whilst parsing the url. Make sure that it is indeed a real, valid url.").to_string();
+    return (parsed, base_url, user_inp); 
+
+}
+
 
 
 #[tokio::main]
-async fn main() -> Result<()>{
+async fn main() -> Result<()>{ 
     println!("Please enter the site you'd like to find the links in: ");
-    let mut user_inp = String::new();
-    io::stdin().read_line(&mut user_inp).expect("Some shit went wrong!");
-    let parsed = Url::parse(user_inp.trim()).expect("Something went wrong...");
-    let base_url = parsed.host_str().expect("Something went wrong whilst parsing the url. Make sure that it is indeed a real, valid url.");
-    println!("The base url is: {base_url}");
+    let (parsed, base_url, user_inp) = read_user();
     let res = reqwest::get(user_inp)
         .await?
         .text()
@@ -32,16 +37,7 @@ async fn main() -> Result<()>{
     for link in &domain_list{
         println!("{link}");
     }
-    
-    Ok(())
+   Ok(()) 
 }
-/*
-async fn fetch_urls(url_list: Vec<String>) {
-        for i in url_list{
-                    let res = reqwest::get(url_list[i])
-                        .await?
-                        .text()
-                        .await?
-  
 
-  */
+
